@@ -1,0 +1,7 @@
+{
+  "name": "config-editor",
+  "short_name": "config-editor",
+  "description": "Kwantu Configuration Editor",
+  "start_url": "/",
+  "display": "standalone"
+}

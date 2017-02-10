@@ -1,0 +1,13 @@
+os:
+  - linux
+language: node_js
+node_js:
+  - "6.5.0"
+before_script:
+  - npm i polymer-cli -g
+  - bower install
+  - polymer build
+script:
+  - polymer test
+# Send coverage data to Coveralls
+# after_script: "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf coverage"

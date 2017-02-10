@@ -1,0 +1,24 @@
+{
+  "name": "@kwantu/config-editor",
+  "version": "0.1.0",
+  "description": "Kwantu configuration editor",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwantu/config-editor.git"
+  },
+  "keywords": [
+    "kwantu",
+    "config",
+    "editor"
+  ],
+  "author": "Brent Gordon <brentgordon01@gmail.com>",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/kwantu/config-editor/issues"
+  },
+  "homepage": "https://github.com/kwantu/config-editor#readme"
+}
