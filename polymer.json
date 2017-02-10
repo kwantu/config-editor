@@ -1,0 +1,14 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/kwantu-tools/kwantu-tools.html",
+  "fragments": [],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json",
+    "manifest.json"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}
