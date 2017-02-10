@@ -1,6 +1,6 @@
 {
   "name": "@kwantu/config-editor",
-  "version": "0.1.0",
+  "version": "0.1.5",
   "description": "Kwantu configuration editor",
   "main": "index.html",
   "scripts": {
