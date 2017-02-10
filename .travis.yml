@@ -4,7 +4,7 @@ language: node_js
 node_js:
   - "6.5.0"
 before_script:
-  - npm i polymer-cli -g
+  - npm i bower polymer-cli -g
   - bower install
   - polymer build
 script:
