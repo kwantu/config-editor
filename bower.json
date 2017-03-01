@@ -3,7 +3,13 @@
   "description": "Kwantu Configuration Editor",
   "main": "index.html",
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.4.0"
+    "polymer": "Polymer/polymer#^1.4.0",
+    "app-layout": "PolymerElements/app-layout#^0.10.7",
+    "paper-tabs": "PolymerElements/paper-tabs#^1.8.0",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.8",
+    "codemirror": "^5.24.2",
+    "dragula.js": "dragula#^3.7.2",
+    "draggabilly": "^2.1.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

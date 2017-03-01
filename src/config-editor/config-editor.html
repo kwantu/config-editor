@@ -1,0 +1,342 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+
+<style is="custom-style" include="iron-flex iron-positioning"></style>
+
+<dom-module id="config-editor">
+  <template>
+    <style is="custom-style">
+      :host {
+          display: block;
+          height: 100%;
+      }
+      .container {
+        height: 100%;
+      }
+      .logo {
+        width: 205px;
+        height: 52px;
+        padding-left: 30px;
+      }
+      .main {
+        height: 100%;
+      }
+      .panel {
+        border: 1px solid #808080;
+        /*height: 100%;*/
+      }
+      .grid {
+        height: 100%;
+        position: relative;
+        outline: none;
+        display: block;
+        background-image: url(../../images/grid.png);
+      }
+      #elements {
+        padding: 5px; 
+      }
+      div.element {
+        /*border: 1px solid #efefef;
+        border-radius: 2px;*/
+        padding: 5px;
+        width: 50%;
+      }
+      div.element:hover {
+        cursor: pointer;
+      }
+      paper-toolbar {
+        /*border-bottom: 2px solid #808080;*/
+        --paper-toolbar-title: {
+          margin-left: 0px;
+          padding: 5px;
+          margin-top: 28px;          
+        }        
+      }
+      .focus {
+        border: 2px solid blue;      
+      }
+      .container-focus {
+        border: 1px dashed grey;
+      }
+    </style>
+    <!-- Build the template for the config editor IDE -->
+    <div class="vertical layout container">
+      <paper-toolbar>
+        <img class="logo" src="../../images/kwantuLogo.svg"></img>
+        <div class="title"></div>
+        <paper-icon-button icon="save"></paper-icon-button>
+        <paper-icon-button icon="undo"></paper-icon-button>
+        <paper-icon-button icon="redo"></paper-icon-button>
+        <paper-icon-button icon="more-vert"></paper-icon-button>
+        <div id="progressBar" class="bottom fit"></div>
+      </paper-toolbar>
+      <div class="horizontal layout main">
+        <div class="flex panel">
+          <paper-tabs selected="{{elemSelector}}">
+            <paper-tab>Elements</paper-tab>
+            <paper-tab>Outline</paper-tab>
+          </paper-tabs>
+          <iron-pages style="height: inherit" selected="{{elemSelector}}">
+            <div id="elements">
+              <div id="paper-button" class="element" raised><iron-icon icon="image:crop-5-4"></iron-icon>Button</div>
+              <div id="paper-tabs" class="element" selected="0"><iron-icon icon="icons:tab"></iron-icon>Tabs</div>
+            </div>
+            <div>
+
+            </div>
+          </iron-pages>
+        </div>
+        <div class="flex-3 panel">
+          <paper-tabs selected="{{designSelector}}">
+            <paper-tab>Designer</paper-tab>
+            <paper-tab id="tabSource">Source</paper-tab>
+            <paper-tab>Widget</paper-tab>
+          </paper-tabs>
+          <iron-pages style="height: 100%" selected="{{designSelector}}">
+            <div id="canvas" class="grid">
+
+            </div>
+            <div id="source">
+
+            </div>
+            <div>
+
+            </div>
+          </iron-pages>
+        </div>
+        <div class="flex panel">
+          <paper-tabs selected="{{propSelector}}">
+            <paper-tab>Properties</paper-tab>
+            <paper-tab>Layout</paper-tab>
+          </paper-tabs>
+          <iron-pages style="height: 100%" selected="{{propSelector}}">
+            <div>
+
+            </div>
+            <div>
+
+            </div>
+          </iron-pages>
+        </div>
+      </div>
+    </div>
+  </template>
+  <script>
+    Polymer({
+
+      is: 'config-editor',
+
+      properties: {
+        // Selected properties for the tabs
+        elemSelector: {
+          type: Number,
+          value: 0,
+        },
+        designSelector: {
+          type: Number,
+          value: 0,
+        },
+        propSelector: {
+          type: Number,
+          value: 0,
+        },
+        // Code mirror options
+        options: {
+          type: Object,
+          value: {
+            mode:  'text/html',
+            lineNumbers: true,
+            smartIndent: true,
+            lineWrapping: true,
+            extraKeys: {
+              "Ctrl-Q": (cm) => { 
+                cm.foldCode(cm.getCursor()); 
+              }
+            },
+            foldGutter: true,
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+          }
+        }
+      },
+      /*
+       * Check if the passed in element has the passed in
+       * class
+       *
+       * @param {object} elem DOM element
+       * @param {string} className the class name
+       *
+       */
+      _hasClass: (elem, className) => {
+        if (elem.classList)
+          return elem.classList.contains(className)
+        else
+          return !!elem.className.match(new RegExp('(\\s|^)' + className + '(\\s|$)'))
+      },
+      _addClass: (elem, className) => {
+        // console.log(elem)
+        if (elem.classList)
+          elem.classList.add(className)
+        else if (!hasClass(elem, className)) elem.className += " " + className
+      },
+      _removeClass: (elem, className) => {
+        if (elem.classList)
+          elem.classList.remove(className)
+        else if (this._hasClass(elem, className)) {
+          var reg = new RegExp('(\\s|^)' + className + '(\\s|$)')
+          elem.className=elem.className.replace(reg, ' ')
+        }
+      },
+      _getAttributes: (attrs) => {
+        let arr = []
+        for (let attr in attrs){
+          let nodeName = attr.nodeName
+          let node = {
+            nodeName: attr.nodeName
+          }
+          arr.push(node);
+        }
+        console.log('arr: ', arr)
+      },
+      _setFocus: (elem, _this) => {
+        let prevStyle = ''
+        let draggableElems = document.querySelectorAll('.draggable')
+        for ( let i=0, len = draggableElems.length; i < len; i++ ) {
+          _this._looseFocus(draggableElems[i], _this)
+        }
+        _this._addClass(elem, 'focus')
+        // if (elem.attributes.getNamedItem('style')) {
+        //   prevStyle = elem.attributes.getNamedItem('style').nodeValue
+        // }
+        // elem.setAttribute('style', prevStyle + '; border: 2px solid blue')
+      },
+      _looseFocus: (elem, _this) => {
+        let prevStyle = ''
+        // if (elem.attributes.getNamedItem('style')) {
+        //   prevStyle = elem.attributes.getNamedItem('style').nodeValue
+        // }
+        // elem.setAttribute('style', prevStyle + '; border: inherit')
+        _this._removeClass(elem, 'focus')
+      },
+      _createButton: (elem, target) => {
+        elem.setAttribute('raised', '')   
+        elem.innerText = target.innerText 
+      },
+      _createTabs: (elem, editor, _this) => {
+        let tabs = document.createElement('paper-tabs')
+        let pages = document.createElement('iron-pages')
+        elem.appendChild(tabs)
+        elem.appendChild(pages)
+        elem.setAttribute('style', 'width: 50%')
+        pages.setAttribute('style', 'height: 200px; background-color: white')
+        tabs.selected = 0 
+        pages.selected = 0
+        for (let i = 0; i <= 1; i++) {
+          let tab = document.createElement('paper-tab')
+          let page = document.createElement('div')
+          tab.innerText = 'Tab ' + i
+          page.innerText = 'Page ' + i
+          Polymer.dom(tabs).appendChild(tab)
+          Polymer.dom(pages).appendChild(page)
+          page.setAttribute('style', 'height: 100%; padding: 2px')
+          editor.containers.push(page)
+        }        
+        console.log(elem)
+      },
+      _createElement: (elementId, element, attributes, srcEditor, container, editor, _this) => {
+        let elem = document.createElement(elementId)
+        let target = document.getElementById(element.id)        
+        // Set element specific attributes
+        switch(elementId) {
+          case 'paper-button':
+            _this._createButton(elem, target)
+            break;
+          case 'div':
+            _this._createTabs(elem, editor, _this)
+            break;
+        }
+        // Add the new element
+        target.parentNode.replaceChild(elem, target)
+        _this._addClass(elem, 'config-editor')
+        // Add the draggable class and initiate the draggable functionality        
+        _this._addClass(elem, 'draggable')
+        let dragElement = new Draggabilly(elem, {
+          containment: _this.$.canvas
+        });
+        elem.addEventListener('click', (event) => {
+          _this._setFocus(elem, _this)
+        }) 
+        dragElement.on('dragStart', (event, pointer) => {
+          _this._setFocus(elem, _this)
+          srcEditor.setValue(_this._updateSource(_this))
+        })
+        dragElement.on('dragEnd', (event, pointer) => {
+          console.log(container)
+          _this._removeClass(container, 'container-focus')
+        })
+        // _this._setFocus(elem, _this)
+      },
+      _updateSource: (_this) => {
+        let elements = _this.$.canvas.childNodes
+        let startString = '<link rel="import" href="../polymer/polymer.html">\n\n<polymer-element name="my-element">\n'
+        let innerString = ''
+        elements.forEach((value, key, listObj, argument) => { 
+          if (value.outerHTML) {
+            innerString = innerString + '\n' + value.outerHTML // .replace(value.innerHTML, '')
+          }
+        })
+        let endString = '\n\n</polymer-element>'
+        return startString + innerString + endString
+      },
+      // On ready life cycle event of the main kwantu-tools element
+      ready: function() {
+        // Initialise the drag and drop functionality
+        let editor = dragula([this.$.elements, this.$.canvas], {
+          copy: true,
+          revertOnSpill: true
+        });
+        // Initialise the code source editor
+        let srcEditor = CodeMirror(this.$.source, this.options)
+        this.$$('.CodeMirror').setAttribute('style', 'height: 98%')
+
+        editor.on('drop', (elem, target, source, sibling) => {
+          let elemId;
+          if (elem.id === 'paper-tabs') {
+            elemId = 'div'
+          } else {
+            elemId = elem.id
+          }
+          // let elemId = elem.id
+          elem.id = elem.id + '-inst'
+          // Check if a new element was dragged onto the canvas
+          if (elemId) {
+            this._createElement(elemId, elem, elem.attributes, srcEditor, target, editor, this) 
+            this._setFocus(elem, this)
+            srcEditor.setValue(this._updateSource(this))
+            this._removeClass(target, 'container-focus')
+          } 
+        })
+        editor.on('over', (elem, container, source) => {
+          console.log(container)
+          // console.log(source)
+          if (container.id !== 'elements') {
+            this._addClass(container, 'container-focus')
+          }
+        })
+        // Load code editor on click of the source tab
+        this.$.tabSource.addEventListener('click', (event) => {
+          srcEditor.refresh()
+        })        
+      }      
+
+    });
+  </script>
+</dom-module>

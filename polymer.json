@@ -1,6 +1,6 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/kwantu-tools/kwantu-tools.html",
+  "shell": "src/kwantu-tools/config-editor.html",
   "fragments": [],
   "sources": [
     "src/**/*",
