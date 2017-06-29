@@ -1,14 +1,30 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/kwantu-tools/config-editor.html",
-  "fragments": [],
-  "sources": [
-    "src/**/*",
-    "images/**/*",
-    "bower.json",
-    "manifest.json"
+  "shell": "src/app/main.html",
+  "fragments": [
+    "src/elements/**/*"
   ],
-  "includeDependencies": [
+  "sources": [
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
-  ]
+  ],
+  "builds": [{
+    "bundle": true,
+    "js": {
+      "minify": true
+    },
+    "css": {
+      "minify": true
+    },
+    "html": {
+      "minify": true
+    }
+  }],
+  "lint": {
+    "rules": ["polymer-2"],
+    "ignoreWarnings": []
+  }
 }

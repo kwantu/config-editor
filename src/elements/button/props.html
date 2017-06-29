@@ -1,0 +1,40 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+
+<dom-module id="button-props">
+    <template>
+        <style include="style"></style>
+        <div style="padding: 10px">
+            <paper-input always-float-label label="Label" value={{model.label.i18n.en}}></paper-input>
+            <paper-input always-float-label label="Style" value="{{model.class}}"></paper-input>
+        </div>       
+    </template>
+    <script>
+        Polymer({
+            is: 'button-props',
+            properties: {
+                model: {
+                    type: Object,
+                    notify: true
+                }
+            },
+            observers: [
+                '_modelUpdated(model.*)'
+            ],
+
+            /**
+             * 
+             */
+            _modelUpdated: function(data) {
+                console.log('EVENT:: "_modelUpdated" triggered!!')
+                let element = document.getElementById(this.model.id)
+                element.set(data.path, data.value)
+            },
+            /**
+             * 
+             */
+            ready: function () {}
+
+        });
+    </script>
+</dom-module>
