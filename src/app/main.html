@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
-
 <link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
 <link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
 <!--<link rel="import" href="../../bower_components/paper-button/paper-button.html">-->
@@ -10,259 +9,253 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/beautify-json/beautify-json.html">
-
 <link rel="import" href="../elements/all.html">
-
 <style is="custom-style" include="iron-flex iron-positioning"></style>
 <link rel="import" href="style.html">
-
 <dom-module id="kul-app">
-  <template>
-    <style include="style"></style>
-    <!-- Build the template for the config editor IDE -->
-    <div class="vertical layout container">
-      <paper-toolbar>
-        <img class="logo" src="../images/kwantuLogo.svg"></img>
-        <div class="title"></div>
-        <paper-icon-button icon="save"></paper-icon-button>
-        <paper-icon-button icon="undo"></paper-icon-button>
-        <paper-icon-button icon="redo"></paper-icon-button>
-        <paper-icon-button icon="more-vert"></paper-icon-button>
-        <div id="progressBar" class="bottom fit"></div>
-      </paper-toolbar>
-      <div class="horizontal layout main">
-        <div class="flex panel">
-          <paper-tabs selected="{{elemSelector}}">
-            <paper-tab>Elements</paper-tab>
-            <paper-tab>Outline</paper-tab>
-          </paper-tabs>
-          <iron-pages style="height: inherit" selected="{{elemSelector}}">
-            <div id="elements">
-              <elem-button label="Button"></elem-button>
+    <template>
+        <style include="style"></style>
+        <!-- Build the template for the config editor IDE -->
+        <div class="vertical layout container">
+            <paper-toolbar>
+                <img class="logo" src="../images/kwantuLogo.svg"></img>
+                <div class="title"></div>
+                <paper-icon-button icon="save"></paper-icon-button>
+                <paper-icon-button icon="undo"></paper-icon-button>
+                <paper-icon-button icon="redo"></paper-icon-button>
+                <paper-icon-button icon="more-vert"></paper-icon-button>
+                <div id="progressBar" class="bottom fit"></div>
+            </paper-toolbar>
+            <div class="horizontal layout main">
+                <div class="flex panel">
+                    <paper-tabs selected="{{elemSelector}}">
+                        <paper-tab>Elements</paper-tab>
+                        <paper-tab>Outline</paper-tab>
+                    </paper-tabs>
+                    <iron-pages style="height: inherit" selected="{{elemSelector}}">
+                        <div id="elements">
+                            <elem-button label="Button"></elem-button>
+                        </div>
+                        <div>
+                        </div>
+                    </iron-pages>
+                </div>
+                <div class="flex-3 panel">
+                    <paper-tabs selected="{{designSelector}}">
+                        <paper-tab>Designer</paper-tab>
+                        <paper-tab id="tabSource">Source</paper-tab>
+                        <paper-tab>Widget</paper-tab>
+                    </paper-tabs>
+                    <iron-pages style="height: 100%" selected="{{designSelector}}">
+                        <div id="canvas" class="grid"></div>
+                        <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json>
+                        <div>
+                        </div>
+                    </iron-pages>
+                </div>
+                <div class="flex panel">
+                    <paper-tabs selected="{{propSelector}}">
+                        <paper-tab>Properties</paper-tab>
+                        <paper-tab>Layout</paper-tab>
+                    </paper-tabs>
+                    <iron-pages style="height: 100%" selected="{{propSelector}}">
+                        <div>
+                            <button-props model="{{CURRENT_ELEMENT_MODEL}}"></button-props>
+                        </div>
+                        <div>
+                        </div>
+                    </iron-pages>
+                </div>
             </div>
-            <div>
-
-            </div>
-          </iron-pages>
         </div>
-        <div class="flex-3 panel">
-          <paper-tabs selected="{{designSelector}}">
-            <paper-tab>Designer</paper-tab>
-            <paper-tab id="tabSource">Source</paper-tab>
-            <paper-tab>Widget</paper-tab>
-          </paper-tabs>
-          <iron-pages style="height: 100%" selected="{{designSelector}}">
-            <div id="canvas" class="grid"></div>
-            <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json>
-            <div>
-
-            </div>
-          </iron-pages>
-        </div>
-        <div class="flex panel">
-          <paper-tabs selected="{{propSelector}}">
-            <paper-tab>Properties</paper-tab>
-            <paper-tab>Layout</paper-tab>
-          </paper-tabs>
-          <iron-pages style="height: 100%" selected="{{propSelector}}">
-            <div>
-              <button-props model="{{CURRENT_ELEMENT_MODEL}}"></button-props>
-            </div>
-            <div>
-
-            </div>
-          </iron-pages>
-        </div>
-      </div>
-    </div>
-  </template>
-  <script>
-    var SDOViewModel = function (componentType) {
-      var uuid = window.uuid.make(1).format()
-      return {
-        "_id": uuid,
-        "name": {
-          "i18n": {
-            "en": ""
-          }
-        },
-        "documentation": {
-          "i18n": {
-            "en": ""
-          }
-        },
-        "component": {
-          "type": componentType,
-          "currentVersion": "2.0.0",
-          "version": {
-            "2.0.0": {
-              "name": {
+    </template>
+    <script>
+        var SDOViewModel = function (componentType) {
+        var uuid = window.uuid.make(1).format()
+        return {
+            "_id": uuid,
+            "name": {
                 "i18n": {
-                  "en": ""
+                    "en": ""
                 }
-              },
-              "details": {
+            },
+            "documentation": {
                 "i18n": {
-                  "en": ""
+                    "en": ""
                 }
-              },
-              "settings": {},
-              "includes": [],
-              "elements": [],
-              "interface": {
-                "format": "html",
-                "template": ""
-              }
+            },
+            "component": {
+                "type": componentType,
+                "currentVersion": "2.0.0",
+                "version": {
+                    "2.0.0": {
+                        "name": {
+                            "i18n": {
+                                "en": ""
+                            }
+                        },
+                        "details": {
+                            "i18n": {
+                                "en": ""
+                            }
+                        },
+                        "settings": {},
+                        "includes": [],
+                        "elements": [],
+                        "interface": {
+                            "format": "html",
+                            "template": ""
+                        }
+                    }
+                }
             }
-          }
         }
-      }
     }
 
     Polymer({
 
-      is: 'kul-app',
+        is: 'kul-app',
 
-      properties: {
-        elemSelector: {
-          type: Number,
-          value: 0
-        },
-        designSelector: {
-          type: Number,
-          value: 0
-        },
-        propSelector: {
-          type: Number,
-          value: 0
-        },
-        SDO_VIEWMODEL_ID: {
-          type: String,
-          value: function () {
-            return _.get(utils.URLParams, 'id')
-          }
-        },
-        SDO_VIEWMODEL: {
-          type: Object,
-          notify: true
-        },
-        CURRENT_ELEMENT_ID: {
-          type: String,
-          value: ''
-        },
-        CURRENT_ELEMENT_MODEL: {
-          type: Object,
-          notify: true
-        }
-      },
-      // On ready life cycle event of the main kwantu-tools element
-      ready: function () {
-        let self = this
-        // Global Model Events
-        let CREATE_MODEL = new Event('createModel')
-        let READ_MODEL = new Event('readModel')
-        let UPDATE_MODEL = new Event('updateModel')
-        let DELETE_MODEL = new Event('deleteModel')
-        // Defaults
-        // Get the current config version
-        let currentVersion = ''
-        let config = ''
-        // Add event listeners
-        self.addEventListener('createModel', function (event) {
-          // console.log('createModel event triggered!!')
-          console.log('EVENT:: "SDO createModel" triggered!!', self.SDO_VIEWMODEL)
-          database.put(self.SDO_VIEWMODEL, function (err, response) {
-            if (err) {
-              return console.log(err);
+        properties: {
+            elemSelector: {
+                type: Number,
+                value: 0
+            },
+            designSelector: {
+                type: Number,
+                value: 0
+            },
+            propSelector: {
+                type: Number,
+                value: 0
+            },
+            SDO_VIEWMODEL_ID: {
+                type: String,
+                value: function () {
+                    return _.get(utils.URLParams, 'id')
+                }
+            },
+            SDO_VIEWMODEL: {
+                type: Object,
+                notify: true
+            },
+            CURRENT_ELEMENT_ID: {
+                type: String,
+                value: ''
+            },
+            CURRENT_ELEMENT_MODEL: {
+                type: Object,
+                notify: true
             }
-            // handle response
-            database.get(response.id, function (err, model) {
-              if (err) {
-                return console.log(err);
-              }
-              self.set('SDO_VIEWMODEL', model)
-            })
-          })
-        })
-        self.addEventListener('readModel', function (event) {
-          // console.log('readModel event triggered!!')
-          console.log('EVENT:: "SDO readModel" triggered!!', self.SDO_VIEWMODEL)
-          database.get(self.SDO_VIEWMODEL_ID, function (err, response) {
-            if (err) {
-              return console.log(err);
-            }
-            // handle response
-            self.set('SDO_VIEWMODEL', response)
-            console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
+        },
+        // On ready life cycle event of the main kwantu-tools element
+        ready: function () {
+            let self = this
+            // Global Model Events
+            let CREATE_MODEL = new Event('createModel')
+            let READ_MODEL = new Event('readModel')
+            let UPDATE_MODEL = new Event('updateModel')
+            let DELETE_MODEL = new Event('deleteModel')
+            // Defaults
             // Get the current config version
-            currentVersion = self.SDO_VIEWMODEL.component.currentVersion
-            config = self.SDO_VIEWMODEL.component.version[currentVersion]
-            // Initialise the designer with the current interface template
-            utils.parseHTMLString(config.interface.template, canvas, true)
-          })
-        })
-        self.addEventListener('updateModel', function (event) {
-          // console.log('updateModel event triggered!!') 
-          console.log('EVENT:: "SDO updateModel" triggered!!', self.SDO_VIEWMODEL)
-          database.put(self.SDO_VIEWMODEL, function (err, response) {
-            if (err) {
-              return console.log(err);
-            }
-            database.get(response.id, function (err, model) {
-              if (err) {
-                return console.log(err);
-              }
-              self.set('SDO_VIEWMODEL', model)
+            let currentVersion = ''
+            let config = ''
+            // Add event listeners
+            self.addEventListener('createModel', function (event) {
+                // console.log('createModel event triggered!!')
+                console.log('EVENT:: "SDO createModel" triggered!!', self.SDO_VIEWMODEL)
+                database.put(self.SDO_VIEWMODEL, function (err, response) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    // handle response
+                    database.get(response.id, function (err, model) {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        self.set('SDO_VIEWMODEL', model)
+                    })
+                })
             })
-          })
-        })
-        self.addEventListener('deleteModel', function (event) {
-          console.log('EVENT:: "SDO deleteModel" triggered!!')
+            self.addEventListener('readModel', function (event) {
+                // console.log('readModel event triggered!!')
+                console.log('EVENT:: "SDO readModel" triggered!!', self.SDO_VIEWMODEL)
+                database.get(self.SDO_VIEWMODEL_ID, function (err, response) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    // handle response
+                    self.set('SDO_VIEWMODEL', response)
+                    console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
+                    // Get the current config version
+                    currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+                    config = self.SDO_VIEWMODEL.component.version[currentVersion]
+                    // Initialise the designer with the current interface template
+                    utils.parseHTMLString(config.interface.template, canvas, true)
+                })
+            })
+            self.addEventListener('updateModel', function (event) {
+                // console.log('updateModel event triggered!!') 
+                console.log('EVENT:: "SDO updateModel" triggered!!', self.SDO_VIEWMODEL)
+                database.put(self.SDO_VIEWMODEL, function (err, response) {
+                    if (err) {
+                        return console.log(err);
+                    }
+                    database.get(response.id, function (err, model) {
+                        if (err) {
+                            return console.log(err);
+                        }
+                        self.set('SDO_VIEWMODEL', model)
+                    })
+                })
+            })
+            self.addEventListener('deleteModel', function (event) {
+                console.log('EVENT:: "SDO deleteModel" triggered!!')
 
-        })
-        // Get the config data model
-        if (_.isUndefined(self.SDO_VIEWMODEL_ID)) {
-          self.set('SDO_VIEWMODEL', new SDOViewModel('default'))
-          currentVersion = self.SDO_VIEWMODEL.component.currentVersion
-          config = self.SDO_VIEWMODEL.component.version[currentVersion]
-          // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
-          self.dispatchEvent(CREATE_MODEL)
-        } else {
-          console.log('self.SDO_VIEWMODEL_ID: ' + self.SDO_VIEWMODEL_ID)
-          self.dispatchEvent(READ_MODEL)
+            })
+            // Get the config data model
+            if (_.isUndefined(self.SDO_VIEWMODEL_ID)) {
+                self.set('SDO_VIEWMODEL', new SDOViewModel('default'))
+                currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+                config = self.SDO_VIEWMODEL.component.version[currentVersion]
+                // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
+                self.dispatchEvent(CREATE_MODEL)
+            } else {
+                console.log('self.SDO_VIEWMODEL_ID: ' + self.SDO_VIEWMODEL_ID)
+                self.dispatchEvent(READ_MODEL)
+            }
+
+            // Config editor reference areas
+            let canvas = self.$.canvas
+            let elements = self.$.elements
+            let source = self.$.source
+
+            // Initialise the drag and drop functionality
+            let editor = dragula([elements, canvas], {
+                copy: true,
+                revertOnSpill: true
+            })
+            // On drop of the element, create the associated Polymer component
+            // and associated properties data model
+            editor.on('drop', function (element, target, source, sibling) {
+                let elementRef;
+                element.create(config, target, source, sibling).then(function (data) {
+                    config.elements.push(data)
+                    config.interface.template = canvas.innerHTML
+                    self.set('CURRENT_ELEMENT_ID', data.id)
+                    self.set('CURRENT_ELEMENT_MODEL', data)
+                    self.dispatchEvent(UPDATE_MODEL)
+                }).catch(function (error) {
+                    console.error(error)
+                })
+            })
+
+            // Reload code editor on click of the source tab
+            self.$.tabSource.addEventListener('click', function (event) {
+                // code.refresh()
+            })
         }
-
-        // Config editor reference areas
-        let canvas = self.$.canvas
-        let elements = self.$.elements
-        let source = self.$.source
-
-        // Initialise the drag and drop functionality
-        let editor = dragula([elements, canvas], {
-          copy: true,
-          revertOnSpill: true
-        })
-        // On drop of the element, create the associated Polymer component
-        // and associated properties data model
-        editor.on('drop', function (element, target, source, sibling) {
-          let elementRef;
-          element.create(config, target, source, sibling).then(function (data) {
-            config.elements.push(data)
-            config.interface.template = canvas.innerHTML
-            self.set('CURRENT_ELEMENT_ID', data.id)
-            self.set('CURRENT_ELEMENT_MODEL', data)
-            self.dispatchEvent(UPDATE_MODEL)
-          }).catch(function (error) {
-            console.error(error)
-          })
-        })
-
-        // Reload code editor on click of the source tab
-        self.$.tabSource.addEventListener('click', function (event) {
-          // code.refresh()
-        })
-      }
 
     });
-  </script>
+    </script>
 </dom-module>

@@ -1,16 +1,22 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 
-<dom-module id="kul-button">    
+<dom-module id="kul-button">
     <template>
         <style>
-
+            :host {
+                display: block;
+            }
+            :host:hover {
+                cursor: pointer;
+            }
+            div.element {
+                padding: 5px;
+            } 
         </style>
-        <paper-button id="element"
-            raised="{{model.attrs.raised}}" 
-            class$="{{model.class}}">
+        <paper-button id="element" raised="{{model.attrs.raised}}" class$="{{model.class}}">
             {{model.label.i18n.en}}
-        </paper-button>        
+        </paper-button>
     </template>
     <script>
         Polymer({

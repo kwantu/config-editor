@@ -3,11 +3,16 @@
 
 <dom-module id="button-props">
     <template>
-        <style include="style"></style>
-        <div style="padding: 10px">
+        <style>
+            :host {
+                display: block;
+                padding: 10px
+            }
+        </style>
+        <div>
             <paper-input always-float-label label="Label" value={{model.label.i18n.en}}></paper-input>
             <paper-input always-float-label label="Style" value="{{model.class}}"></paper-input>
-        </div>       
+        </div>
     </template>
     <script>
         Polymer({
@@ -25,7 +30,7 @@
             /**
              * 
              */
-            _modelUpdated: function(data) {
+            _modelUpdated: function (data) {
                 console.log('EVENT:: "_modelUpdated" triggered!!')
                 let element = document.getElementById(this.model.id)
                 element.set(data.path, data.value)

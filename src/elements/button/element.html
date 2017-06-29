@@ -1,13 +1,19 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="button.html">
-<!-- Custom styling -->
-<link rel="import" href="styling.html">
-<!-- MODEL -->
-<script src="model.js"></script>
-<!-- VIEW -->
+
 <dom-module id="elem-button">
     <template>
-        <style include="style"></style>
+        <style>
+            :host {
+                display: block;
+            }
+            :host:hover {
+                cursor: pointer;
+            }
+            div.element {
+                padding: 5px;
+            } 
+        </style>
         <div class="element">{{label}}</div>
     </template>
     <script>
@@ -23,14 +29,12 @@
             /**
              * 
              */
-            ready: function () {
-                
-            },
+            ready: function () {},
 
             /**
              * 
              */
-            _createModel: function(uuid) {                
+            _createModel: function (uuid) {
                 return {
                     'id': uuid,
                     'label': {
@@ -58,7 +62,7 @@
             /**
              * 
              */
-            _createView: function(model, config, self, source, target){
+            _createView: function (model, config, self, source, target) {
                 let app = document.getElementsByTagName('kul-app')[0]
                 // Create the element
                 let elem = document.createElement('kul-button')
@@ -70,9 +74,11 @@
                 new Draggabilly(elem, {
                     containment: target
                 }).on('dragStart', (event, pointer) => {
-                    utils.setFocus(elem, target)            
+                    utils.setFocus(elem, target)
                 }).on('dragEnd', (event, pointer) => {
-                    app.set('SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template', target.innerHTML)
+                    app.set(
+                        'SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template',
+                        target.innerHTML)
 
                 })
                 // Change focus on click
@@ -90,23 +96,21 @@
             create: function (config, target, source, sibling) {
                 let self = this
                 let uuid = window.uuid.make(1).format()
-                return new Promise(function(resolve, reject) {
-                    try {                
+                return new Promise(function (resolve, reject) {
+                    try {
                         // Create the element config data model
                         let model = self._createModel(uuid)
                         // Create the element
                         let view = self._createView(model, config, self, source, target)
                         // Return the updated data model                
-                        resolve(model) 
-                    } catch(error) {
+                        resolve(model)
+                    } catch (error) {
                         console.error(error)
                         reject(error)
                     }
-                }) 
+                })
             }
 
         });
     </script>
 </dom-module>
-<!-- CONTROLLER -->
-<!--<script src="controller.js"></script>-->
