@@ -1,0 +1,112 @@
+<link rel="import" href="../../../bower_components/polymer/polymer.html">
+<link rel="import" href="button.html">
+<!-- Custom styling -->
+<link rel="import" href="styling.html">
+<!-- MODEL -->
+<script src="model.js"></script>
+<!-- VIEW -->
+<dom-module id="elem-button">
+    <template>
+        <style include="style"></style>
+        <div class="element">{{label}}</div>
+    </template>
+    <script>
+        Polymer({
+            is: 'elem-button',
+            properties: {
+                label: {
+                    type: String,
+                    value: 'Button'
+                }
+            },
+
+            /**
+             * 
+             */
+            ready: function () {
+                
+            },
+
+            /**
+             * 
+             */
+            _createModel: function(uuid) {                
+                return {
+                    'id': uuid,
+                    'label': {
+                        "i18n": {
+                            "en": "Button",
+                            "pt": ""
+                        }
+                    },
+                    'type': 'paper-button',
+                    'class': 'element white draggable focus',
+                    'attrs': {
+                        'width': null,
+                        'height': null,
+                        'raised': true
+                    },
+                    'event': {
+                        'name': 'saveModel',
+                        'params': [
+                            'model'
+                        ]
+                    }
+                }
+            },
+
+            /**
+             * 
+             */
+            _createView: function(model, config, self, source, target){
+                let app = document.getElementsByTagName('kul-app')[0]
+                // Create the element
+                let elem = document.createElement('kul-button')
+                // Set the initial data model
+                elem.set('model', model)
+                // Set the element id
+                elem.set('id', model.id)
+                // Add the draggable class and initiate the draggable functionality        
+                new Draggabilly(elem, {
+                    containment: target
+                }).on('dragStart', (event, pointer) => {
+                    utils.setFocus(elem, target)            
+                }).on('dragEnd', (event, pointer) => {
+                    app.set('SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template', target.innerHTML)
+
+                })
+                // Change focus on click
+                elem.addEventListener('click', (event) => {
+                    utils.setFocus(elem.children[0], target)
+
+                })
+                // Attach to the DOM
+                Polymer.dom(self.parentNode).replaceChild(elem, self)
+            },
+
+            /**
+             * 
+             */
+            create: function (config, target, source, sibling) {
+                let self = this
+                let uuid = window.uuid.make(1).format()
+                return new Promise(function(resolve, reject) {
+                    try {                
+                        // Create the element config data model
+                        let model = self._createModel(uuid)
+                        // Create the element
+                        let view = self._createView(model, config, self, source, target)
+                        // Return the updated data model                
+                        resolve(model) 
+                    } catch(error) {
+                        console.error(error)
+                        reject(error)
+                    }
+                }) 
+            }
+
+        });
+    </script>
+</dom-module>
+<!-- CONTROLLER -->
+<!--<script src="controller.js"></script>-->

@@ -1,0 +1,23 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=759670
+	// for the documentation about the jsconfig.json format
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+        "checkJs": true,
+		"allowSyntheticDefaultImports": true
+	},
+    "include": [
+        "src/**/*.js"
+    ],
+	"exclude": [
+		"node_modules",
+		"bower_components",
+		"jspm_packages",
+		"tmp",
+		"temp"
+	],
+    "typeAcquisition": {
+        "enable": true
+    }
+}

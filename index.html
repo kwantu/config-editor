@@ -11,27 +11,34 @@
 
     <script src="/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
 
-    <script src="/bower_components/codemirror/lib/codemirror.js"></script>
-    <script src="/bower_components/codemirror/addon/fold/foldcode.js"></script>
-    <script src="/bower_components/codemirror/addon/fold/foldgutter.js"></script>
-    <script src="/bower_components/codemirror/addon/fold/xml-fold.js"></script>
-    <script src="/bower_components/codemirror/mode/xml/xml.js"></script>
-
-    <link rel="stylesheet" href="/bower_components/codemirror/lib/codemirror.css">
-    <link rel="stylesheet" href="/bower_components/codemirror/addon/fold/foldgutter.css">
-    <link rel="stylesheet" href="bower_components/codemirror/theme/cobalt.css">
+    <script src="/bower_components/pure-uuid/uuid.min.js"></script>
+    <script src="/bower_components/draggabilly/dist/draggabilly.pkgd.min.js"></script>
+    <script src="/bower_components/dragula.js/dist/dragula.js"></script>
+    <script src="/bower_components/lodash/dist/lodash.min.js"></script>
+    <script src="/bower_components/pouchdb/dist/pouchdb.min.js"></script>    
     
+    <link rel="stylesheet" href="/bower_components/dragula.js/dist/dragula.css">
+
     <link rel="import" href="/src/themes/default.html">
     <link rel="import" href="/src/themes/default.css">
 
-    <link rel="import" href="/bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+    <link rel="import" href="/bower_components/iron-flex-layout/classes/iron-flex-layout.html">        
 
-    <link rel="import" href="/src/config-editor/config-editor.html">
+    <script>
+      // Create JS module instances
+      var database = new PouchDB('config')
+      database.replicate.to('http://localhost:5984/config');
+      var uuid = new UUID(3, "ns:URL", "http://kwantu.net/")
+    </script>
+    
+    <script src="/src/lib/utils.js"></script>
+
+    <link rel="import" href="/src/app/main.html">
+
   </head>
-  <body class="fullbleed">
-    <script src="/bower_components/dragula.js/dist/dragula.js"></script>
-    <link rel="stylesheet" href="bower_components/dragula.js/dist/dragula.css">
-    <script src="/bower_components/draggabilly/dist/draggabilly.pkgd.min.js"></script>
-    <config-editor></config-editor>
+  <body class="fullbleed">    
+
+    <kul-app model="{}"></kul-app>
+    
   </body>
 </html>
