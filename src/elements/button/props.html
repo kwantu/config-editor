@@ -1,5 +1,6 @@
 <link rel="import" href="../../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../../bower_components/paper-toggle-button/paper-toggle-button.html">
 
 <dom-module id="button-props">
     <template>
@@ -8,37 +9,96 @@
                 display: block;
                 padding: 10px
             }
+            paper-toggle-button.green {
+                --paper-toggle-button-checked-bar-color:  var(--paper-green-500);
+                --paper-toggle-button-checked-button-color:  var(--paper-green-500);
+                --paper-toggle-button-checked-ink-color: var(--paper-green-500);
+                --paper-toggle-button-unchecked-bar-color:  var(--paper-teal-500);
+                --paper-toggle-button-unchecked-button-color:  var(--paper-teal-500);
+                --paper-toggle-button-unchecked-ink-color: var(--paper-teal-500);
+            }
+            paper-toggle-button.pink {
+                --paper-toggle-button-checked-bar-color:  var(--paper-pink-500);
+                --paper-toggle-button-checked-button-color:  var(--paper-pink-500);
+                --paper-toggle-button-checked-ink-color: var(--paper-pink-500);
+                --paper-toggle-button-unchecked-bar-color:  var(--paper-indigo-900);
+                --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
+                --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
+            }
         </style>
-        <div>
+        <div style="line-height: 45px">
             <paper-input always-float-label label="Label" value={{model.label.i18n.en}}></paper-input>
-            <paper-input always-float-label label="Style" value="{{model.class}}"></paper-input>
+            <!--<paper-input always-float-label label="Style" value="{{model.class}}"></paper-input>-->
+            <paper-toggle-button class="green" checked="{{model.attrs.active}}">Active</paper-toggle-button>
+            <paper-toggle-button class="green" checked="{{model.attrs.disabled}}">Disabled</paper-toggle-button>
+            <paper-toggle-button class="green" checked="{{model.attrs.focused}}">Focused</paper-toggle-button>
+            <paper-toggle-button class="green" checked="{{model.attrs.raised}}">Raised</paper-toggle-button>
+            <paper-toggle-button class="green" checked="{{model.attrs.toggles}}">Toggles</paper-toggle-button>
         </div>
     </template>
     <script>
         Polymer({
             is: 'button-props',
             properties: {
+                visible: {
+                    type: Boolean,
+                    notify: true,
+                    value: false,
+                    observer: '_setVisibility'
+                },
                 model: {
                     type: Object,
                     notify: true
                 }
             },
             observers: [
-                '_modelUpdated(model.*)'
+                '_updateModel(model.*)'
             ],
 
             /**
              * 
              */
-            _modelUpdated: function (data) {
-                console.log('EVENT:: "_modelUpdated" triggered!!')
-                let element = document.getElementById(this.model.id)
+            _updateModel: (data) => {
+                console.log('EVENT:: "_updateModel" triggered!!', data)
+                console.log('this.model: ', this.model)
+                let model = _.isUndefined(this.model) ? data.base : this.model
+                console.log('model: ', model)
+                // Get the related HTML element by ID
+                let element = document.getElementById(model.id)
+                // Update the element data model
                 element.set(data.path, data.value)
+                // Update the SDO_VIEWMODEL
+                let app = document.getElementsByTagName('kul-app')[0]                
+                let viewModel = app.SDO_VIEWMODEL
+                let elements = viewModel.component.version[viewModel.component.currentVersion].elements
+                console.log('elements: ', elements)
+                console.log('model.id: ', model.id)
+                let index = _.findIndex(elements, { id:  model.id})
+                // Replace item at index using native splice
+                if (index !== -1) {
+                    elements.splice(index, 1, model)
+                } else {
+                    elements.push(model)
+                }
+                // elements.splice(index, 1, model)
+                console.log('index: ', index)
+                // console.log('SDO_VIEWMODEL: ', viewModel)
+                // app.set('SDO_VIEWMODEL', viewModel)
             },
             /**
              * 
              */
-            ready: function () {}
+            _setVisibility: () => {
+                // if(this.visible) {
+                //     this.setAttribute('style', 'display: block')
+                // } else {
+                //     this.setAttribute('style', 'display: none')
+                // }
+            },
+            /**
+             * 
+             */
+            ready: () => {}
 
         });
     </script>

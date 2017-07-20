@@ -82,8 +82,10 @@
         method.setFocus = function (elem, _this) {
             let prevStyle = ''
             let draggableElems = document.querySelectorAll('.draggable')
+            let canvas = document.getElementById('canvas')
             for (let i = 0, len = draggableElems.length; i < len; i++) {
                 this.looseFocus(draggableElems[i], _this)
+                this.looseFocus(canvas, _this)
             }
             this.addClass(elem, 'focus')
         }

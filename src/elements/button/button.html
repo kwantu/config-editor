@@ -4,17 +4,24 @@
 <dom-module id="kul-button">
     <template>
         <style>
-            :host {
-                display: block;
+             :host {
+                display: inline-block
             }
             :host:hover {
                 cursor: pointer;
             }
-            div.element {
+            :host.element {
                 padding: 5px;
-            } 
+            }
+            .white {
+                background-color: white;
+            }
+            .focus {
+                border: 2px solid #80cbc4;
+            }
         </style>
-        <paper-button id="element" raised="{{model.attrs.raised}}" class$="{{model.class}}">
+        <paper-button id="element" raised="{{model.attrs.raised}}" active="{{model.attrs.active}}" disabled="{{model.attrs.disabled}}"
+            focused="{{model.attrs.focused}}" toggles="{{model.attrs.toggles}}" class="white draggable">
             {{model.label.i18n.en}}
         </paper-button>
     </template>
@@ -39,8 +46,18 @@
                 let self = this
                 let app = document.getElementsByTagName('kul-app')[0]
                 self.$.element.addEventListener('click', (event) => {
+                    console.log('EVENT:: "element.click" triggered!!', event)
+                    console.log('app.SDO_VIEWMODEL: ', app.SDO_VIEWMODEL)
                     app.set('CURRENT_ELEMENT_ID', self.model.id)
                     app.set('CURRENT_ELEMENT_MODEL', self.model)
+                    self.setFocus(event)
+                    let children = document.getElementById('prop-editors').children
+                    for (var i = 0; i < children.length; i++) {
+                        var element = children[i];
+                        element.set('visible', false)
+                    }
+                    let props = document.getElementsByTagName('button-props')[0]
+                    props.set('visible', true)
                 })
 
             },
@@ -48,9 +65,10 @@
             /**
              * 
              */
-            attributeChanged: function () {
-                // console.log('EVENT:: "attributeChanged" triggered!!')
-
+            setFocus: function(event) {
+                if (event)
+                    event.stopPropagation()
+                utils.setFocus(this.$.element, document.getElementById('canvas'))
             }
 
         });

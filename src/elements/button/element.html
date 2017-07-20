@@ -14,25 +14,17 @@
                 padding: 5px;
             } 
         </style>
-        <div class="element">{{label}}</div>
+        <div class="element">Button</div>
     </template>
     <script>
         Polymer({
             is: 'elem-button',
-            properties: {
-                label: {
-                    type: String,
-                    value: 'Button'
-                }
-            },
 
             /**
+             * This is the config JSON model for the kul-button element type
              * 
-             */
-            ready: function () {},
-
-            /**
-             * 
+             * @param uuid the unique id used to identify the model
+             * @return JSON button data model
              */
             _createModel: function (uuid) {
                 return {
@@ -43,12 +35,16 @@
                             "pt": ""
                         }
                     },
-                    'type': 'paper-button',
-                    'class': 'element white draggable focus',
+                    'type': 'kul-button',
+                    'ui': 'button-props',
+                    'class': 'element',
                     'attrs': {
-                        'width': null,
-                        'height': null,
-                        'raised': true
+                        'active': true,
+                        'disabled': false,
+                        'elevation': 2,
+                        'focused': true,                      
+                        'raised': true,
+                        'toggles': false
                     },
                     'event': {
                         'name': 'saveModel',
@@ -74,7 +70,8 @@
                 new Draggabilly(elem, {
                     containment: target
                 }).on('dragStart', (event, pointer) => {
-                    utils.setFocus(elem, target)
+                    elem.setFocus()
+
                 }).on('dragEnd', (event, pointer) => {
                     app.set(
                         'SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template',
@@ -83,7 +80,7 @@
                 })
                 // Change focus on click
                 elem.addEventListener('click', (event) => {
-                    utils.setFocus(elem.children[0], target)
+                    // utils.setFocus(elem.children[1], target)
 
                 })
                 // Attach to the DOM
