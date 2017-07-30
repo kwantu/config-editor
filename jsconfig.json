@@ -4,6 +4,11 @@
 	"compilerOptions": {
 		"target": "es5",
 		"module": "commonjs",
+		"lib": [
+			"dom",
+			"es2015",
+			"es2015.promise"
+		],
         "checkJs": true,
 		"allowSyntheticDefaultImports": true
 	},

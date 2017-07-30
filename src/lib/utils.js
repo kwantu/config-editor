@@ -1,3 +1,6 @@
+/// <reference path="../../typings/index.d.ts" />
+/// <reference path="../../typings/global.d.ts" />
+
 (function (window) {
     // You can enable the strict mode commenting the following line  
     'use strict';
@@ -106,45 +109,17 @@
          * @param {any} target
          * @param {Boolean} draggable
          */
-        method.parseHTMLString = function (strHTML, target, draggable) {
-            let root = document.createElement("div")
-            root.innerHTML = strHTML            
-            let elements = root.childNodes
-            for(var i = 0; i < elements.length; i++) {
-                if (elements[i].nodeName !== '#text') {
-                    let newElement = elements[i].cloneNode()
-                    newElement.textContent = elements[i].textContent
-                    let element = target.appendChild(newElement)
-                    if (draggable) {
-                        new Draggabilly(element, {
-                            containment: target
-                        }).on('dragStart', (event, pointer) => {
-                            this.setFocus(element, target)            
-                        }).on('dragEnd', (event, pointer) => {
-                            app.SDO_VIEWMODEL.component.version[app.SDO_VIEWMODEL.component.currentVersion].interface.template = target.innerHTML
-                            window.dispatchEvent(app.event.UPDATE_MODEL)
-                        })
-                    }                    
-                }                
-            }
-        }
 
-        /**
-         * 
-         * 
-         * @param {any} html
-         * @param {any} element
-         */
-        method.injectBoundHTML = function(html, element) {
-            var template = document.createElement('template', 'dom-bind');
-            var doc = template.content.ownerDocument;
-            var div = doc.createElement('div');
-            div.innerHTML = html;
-            template.content.appendChild(div);
-            while (element.firstChild) {
-                element.removeChild(element.firstChild);
-            }
-            element.appendChild(Polymer.Base.instanceTemplate(template));
+        method.str2DOMElement = function(html) {
+            var frame = document.createElement('iframe');
+            frame.style.display = 'none';
+            document.body.appendChild(frame);             
+            frame.contentDocument.open();
+            frame.contentDocument.write(html);
+            frame.contentDocument.close();
+            var el = frame.contentDocument.body.childNodes;
+            document.body.removeChild(frame);
+            return el;
         }
             
         return method;  
