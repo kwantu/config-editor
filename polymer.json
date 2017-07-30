@@ -5,15 +5,23 @@
     "src/elements/**/*"
   ],
   "sources": [
+    "src/**/*",
     "bower.json"
   ],
   "extraDependencies": [
     "manifest.json",
+    "bower_components/pure-uuid/uuid.min.js",
+    "bower_components/draggabilly/dist/draggabilly.pkgd.min.js",
+    "bower_components/dragula.js/dist/dragula.js",
+    "bower_components/lodash/dist/lodash.min.js",
+    "bower_components/pouchdb/dist/pouchdb.min.js",
+    "bower_components/dragula.js/dist/dragula.css",    
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ],
   "builds": [{
     "bundle": true,
     "js": {
+      "compile": true,
       "minify": true
     },
     "css": {

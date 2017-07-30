@@ -25,52 +25,5 @@
             {{model.label.i18n.en}}
         </paper-button>
     </template>
-    <script>
-        Polymer({
-            is: 'kul-button',
-            properties: {
-                id: {
-                    type: String
-                },
-                model: {
-                    type: Object,
-                    observe: true,
-                    notify: true
-                }
-            },
-
-            /**
-             * 
-             */
-            ready: function () {
-                let self = this
-                let app = document.getElementsByTagName('kul-app')[0]
-                self.$.element.addEventListener('click', (event) => {
-                    console.log('EVENT:: "element.click" triggered!!', event)
-                    console.log('app.SDO_VIEWMODEL: ', app.SDO_VIEWMODEL)
-                    app.set('CURRENT_ELEMENT_ID', self.model.id)
-                    app.set('CURRENT_ELEMENT_MODEL', self.model)
-                    self.setFocus(event)
-                    let children = document.getElementById('prop-editors').children
-                    for (var i = 0; i < children.length; i++) {
-                        var element = children[i];
-                        element.set('visible', false)
-                    }
-                    let props = document.getElementsByTagName('button-props')[0]
-                    props.set('visible', true)
-                })
-
-            },
-
-            /**
-             * 
-             */
-            setFocus: function(event) {
-                if (event)
-                    event.stopPropagation()
-                utils.setFocus(this.$.element, document.getElementById('canvas'))
-            }
-
-        });
-    </script>
+    <script type="text/javascript" src="button.js"></script>
 </dom-module>
