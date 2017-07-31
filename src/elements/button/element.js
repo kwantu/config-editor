@@ -44,7 +44,7 @@ Polymer({
      * 
      */
     _createView: function (model, config, self, source, target) {
-        let app = document.getElementsByTagName('kul-app')[0]
+        let APP = document.getElementsByTagName('kul-app')[0]
         // Create the element
         let elem = document.createElement('kul-button')
         // Set the initial data model
@@ -59,7 +59,7 @@ Polymer({
 
         }).on('dragEnd', (event, pointer) => {
             console.log('Drag End: ', target.innerHTML)
-            app.set(
+            APP.set(
                 'SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template',
                 target.innerHTML)
 

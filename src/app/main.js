@@ -50,8 +50,6 @@ var SDOViewModel = function (componentType, uuid) {
     }
 };
 
-let APP = document.getElementsByTagName('kul-app')[0]   
-
 Polymer({
 
     is: 'kul-app',

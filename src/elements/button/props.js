@@ -24,6 +24,7 @@ Polymer({
      */
     _updateModel: (data) => {
         console.log('EVENT:: "_updateModel" triggered!!', data)
+        let APP = document.getElementsByTagName('kul-app')[0]
         // console.log('this.model: ', this.model)
         let model = _.isUndefined(this.model) ? data.base : this.model
         // console.log('model: ', model)
