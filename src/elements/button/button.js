@@ -19,6 +19,7 @@ Polymer({
      */
     ready: function () {
         let self = this        
+        let APP = document.getElementsByTagName('kul-app')[0]
         self.addEventListener('click', (event) => {
             console.log('EVENT:: "element.click" triggered!!', event)
             // Set the currently selected element model

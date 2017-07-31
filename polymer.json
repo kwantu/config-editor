@@ -2,20 +2,15 @@
   "entrypoint": "index.html",
   "shell": "src/app/main.html",
   "fragments": [
-    "src/elements/**/*"
+    "src/elements/**/*",
+    "src/modules/**/*"
   ],
   "sources": [
     "src/**/*",
     "bower.json"
   ],
   "extraDependencies": [
-    "manifest.json",
-    "bower_components/pure-uuid/uuid.min.js",
-    "bower_components/draggabilly/dist/draggabilly.pkgd.min.js",
-    "bower_components/dragula.js/dist/dragula.js",
-    "bower_components/lodash/dist/lodash.min.js",
-    "bower_components/pouchdb/dist/pouchdb.min.js",
-    "bower_components/dragula.js/dist/dragula.css",    
+    "manifest.json", 
     "bower_components/webcomponentsjs/webcomponents-lite.min.js"
   ],
   "builds": [{
