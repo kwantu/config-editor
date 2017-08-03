@@ -87,45 +87,48 @@ Polymer({
         }
     },
     observers: [
-        '_updateModel(SDO_VIEWMODEL.*)'
+        '_updateModel(SDO_VIEWMODEL.*, this)'
     ],
     //
-    _updateModel: (data) => {
+    _updateModel: (data, _this) => {
         console.log('EVENT:: "app._updateModel" triggered!!', data)
-
+        _this.dispatchEvent(_this.READ_MODEL)
+        _this.dispatchEvent(_this.UPDATE_MODEL)
     },
-    //
-    _initCanvas: function(config, target, _self){
+    /**
+     * 
+     */
+    _initCanvas: function(config, target, _self){                
         // Convert the HTML string into HTML Elements
         let elements = window.utils.str2DOMElement(config.interface.template)
         for(var i = 0; i < elements.length; i++) {
-            if (elements[i].nodeName !== '#text') {
+            let elementName = elements[i].nodeName
+            let elementAttrs = elements[i].attributes
+            if (elementName !== '#text') {
                 // Get the data model from the SDO_VIEWMODEL config data model  
-                let model = _.filter(config.elements, { id: elements[i].id })[0]                        
-                // Create the element
-                let element = document.createElement(elements[i].nodeName)
+                let model = _.filter(config.elements, { id: elements[i].id })[0]
+                // console.log('model: ', model) 
+                // Create the KUL Element
+                let KElement = new KULElement(elementName, model, _self)
+                let element = KElement.getView()            
                 // Set the attributes
-                for (var j = 0; j < elements[i].attributes.length; j++) {
-                    element.setAttribute(elements[i].attributes[j].name, elements[i].attributes[j].value)
+                for (var j = 0; j < elementAttrs.length; j++) {
+                    element.setAttribute(elementAttrs[j].name, elementAttrs[j].value)
                 }
                 // Set the inner text
+                // @ts-ignore
                 element.childNodes[1].innerText = elements[i].innerText.split('\n').join('').split(' ').join('')
-                // Add the default drag and drop event listeners / handlers
-                new Draggabilly(element, {
-                    containment: target
-                }).on('dragStart', (event, pointer) => {
-                                
-                }).on('dragEnd', (event, pointer) => {
-                    console.log('Drag End: ', target.innerHTML)
-                    // _self.set(
-                    //     'SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template',
-                    //     target.innerHTML)
-                    _self.SDO_VIEWMODEL.component.version[_self.SDO_VIEWMODEL.component.currentVersion].interface.template = target.innerHTML
-                    console.log('SDO_VIEWMODEL: ', _self.SDO_VIEWMODEL)
-                    _self.dispatchEvent(_self.UPDATE_MODEL)
-                })    
-                // Set / associate the data model
-                element.set('model', model)
+                // Set the width and height
+                // Set to 'width: 100%; height: 100%' by default to adjust to the size
+                // of the parent element
+                if (element.style.height || element.style.width){
+                    let height = parseInt(element.style.height.replace('px', ''))
+                    let width = parseInt(element.style.width.replace('px', ''))
+                    if (height > 0 || width > 0) {
+                        // @ts-ignore
+                        element.childNodes[1].style = 'width: 100%; height: 100%' 
+                    }                      
+                }      
                 // Append child element to the canvas DOM
                 Polymer.dom(target).appendChild(element)               
             }                
@@ -139,6 +142,7 @@ Polymer({
         self.READ_MODEL = new Event('readModel')
         self.UPDATE_MODEL = new Event('updateModel')
         self.DELETE_MODEL = new Event('deleteModel')
+        self.UPDATE_TEMPLATE = new Event('updateTemplate')
         // Defaults
         // Get the current config version
         let currentVersion = ''
@@ -162,14 +166,14 @@ Polymer({
                 })
             })
         })
-        self.addEventListener('readModel', function (event) {
-            console.log('EVENT:: "SDO readModel" triggered!!', self.SDO_VIEWMODEL)
+        self.addEventListener('readModel', function (event) {            
             database.get(self.SDO_VIEWMODEL_ID, function (err, response) {
                 if (err) {
                     return console.log(err);
                 }
                 // Set the SDO_VIEWMODEL
-                self.set('SDO_VIEWMODEL', response)
+                self.set('SDO_VIEWMODEL', response) 
+                console.log('EVENT:: "SDO readModel" triggered!!', self.SDO_VIEWMODEL)               
                 // Get the current config version
                 currentVersion = self.SDO_VIEWMODEL.component.currentVersion
                 config = self.SDO_VIEWMODEL.component.version[currentVersion]
@@ -196,6 +200,15 @@ Polymer({
             console.log('EVENT:: "SDO deleteModel" triggered!!')
 
         })
+        self.addEventListener('updateTemplate', function (event) {
+            console.log('EVENT:: "SDO updateTemplate" triggered!!', self.SDO_VIEWMODEL)
+            // Get the current config version
+            currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+            config = self.SDO_VIEWMODEL.component.version[currentVersion]
+            config.interface.template = canvas.innerHTML            
+            // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
+            self.dispatchEvent(self.UPDATE_MODEL)
+        })
         // Get the config data model
         if (_.isUndefined(self.SDO_VIEWMODEL_ID)) {
             self.set('SDO_VIEWMODEL', SDOViewModel('default', uuid))
@@ -204,7 +217,7 @@ Polymer({
             // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
             self.dispatchEvent(self.CREATE_MODEL)
         } else {
-            console.log('self.SDO_VIEWMODEL_ID: ' + self.SDO_VIEWMODEL_ID)
+            // console.log('self.SDO_VIEWMODEL_ID: ' + self.SDO_VIEWMODEL_ID)
             self.dispatchEvent(self.READ_MODEL)
         }        
 
@@ -216,13 +229,16 @@ Polymer({
         // On drop of the element, create the associated Polymer component
         // and associated properties data model
         editor.on('drop', function (element, target, source, sibling) {
-            let elementRef;
-            element.create(config, target, source, sibling).then(function (data) {
+            element.create(config).then(function (data) {
+                // Add the new element to the SDO_VIEWMODEL elements array
                 config.elements.push(data)
-                // console.log('canvas.innerHTML: ', canvas.innerHTML)
+                // Update the SDO_VIEWMODEL template
                 config.interface.template = canvas.innerHTML
+                // Set the current element id
                 self.set('CURRENT_ELEMENT_ID', data.id)
+                // Set the current element model
                 self.set('CURRENT_ELEMENT_MODEL', data)
+                // Persist the SDO_VIEWMODEL
                 self.dispatchEvent(self.UPDATE_MODEL)
             }).catch(function (error) {
                 console.error(error)
@@ -232,7 +248,8 @@ Polymer({
         // Reload code editor on click of the source tab
         canvas.addEventListener('click', function (event) {
             console.log('EVENT:: "canvas.click" triggered!!', event)
-            window.utils.setFocus(canvas, canvas)
+            // window.utils.setFocus(canvas, canvas)
+            canvas.focus()
             let children = document.getElementById('prop-editors').children
             for (var i = 0; i < children.length; i++) {
                 var element = children[i];

@@ -15,9 +15,8 @@
 
 <link rel="import" href="../modules/pouchdb.html">
 <link rel="import" href="../modules/lodash.html">
-<link rel="import" href="../modules/draggabilly.html">
+<link rel="import" href="../modules/element.html"> 
 <link rel="import" href="../modules/uuid.html">
-<link rel="import" href="../modules/dragula.html">
 <link rel="import" href="../modules/utils.html">
 
 <dom-module id="kul-app">
@@ -42,7 +41,11 @@
                     </paper-tabs>
                     <iron-pages style="height: inherit" selected="{{elemSelector}}">
                         <div id="elements">
-                            <elem-button label="Button"></elem-button>
+                            <div class="heading">Basic</div>
+                            <elem-button></elem-button>
+                            <!-- <elem-card></elem-card> -->
+                            <div class="heading">Enhanced</div>
+
                         </div>
                         <div>
                         </div>
@@ -55,7 +58,7 @@
                         <paper-tab>Widget</paper-tab>
                     </paper-tabs>
                     <iron-pages selected="{{designSelector}}">
-                        <div id="canvas" class="grid"></div>
+                        <div id="canvas" class="grid resize-container"></div>
                         <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json>
                         <div></div> 
                     </iron-pages>

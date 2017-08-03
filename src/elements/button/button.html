@@ -2,24 +2,22 @@
 <link rel="import" href="../../../bower_components/paper-button/paper-button.html">
 
 <link rel="import" href="../../modules/utils.html">
+<link rel="import" href="../../modules/element.html">
 
-<dom-module id="kul-button">
+<dom-module id="kul-button" on-keydown="{{_keyDownHandler}}">
     <template>
         <style>
              :host {
                 display: inline-block
             }
-            :host:hover {
-                cursor: pointer;
-            }
-            :host.element {
-                padding: 5px;
-            }
             .white {
                 background-color: white;
             }
-            .focus {
+            /* .focus {
                 border: 2px solid #80cbc4;
+            } */
+            paper-button {
+                margin: 0;
             }
         </style>
         <paper-button id="element" raised="{{model.attrs.raised}}" active="{{model.attrs.active}}" disabled="{{model.attrs.disabled}}"

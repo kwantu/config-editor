@@ -8,6 +8,8 @@ interface Element extends Element {
     SDO_VIEWMODEL?: any;
     READ_MODEL?: Event;
     UPDATE_MODEL?: Event;
+    UPDATE_TEMPLATE?: Event;
+    ELEMENTS?: [];
 }
 
 interface Window extends Window {
