@@ -9,6 +9,7 @@ interface Element extends Element {
     READ_MODEL?: Event;
     UPDATE_MODEL?: Event;
     UPDATE_TEMPLATE?: Event;
+    CURRENT_ELEMENT_TYPE?: String;
     ELEMENTS?: [];
 }
 

@@ -39,13 +39,23 @@ var KULElement = function(name, model, appController) {
         console.log('EVENT:: "element.click" triggered!!', event)
         self.view.focus()
         self.view.setFocus(event)
+        let editorName = _.toLower(this.name).replace('kul-', '') + '-props'
+        // console.log('self.model: ', self.model)
+        self.appController.set('CURRENT_ELEMENT_TYPE', editorName)
         self.appController.set('CURRENT_ELEMENT_ID', self.model.id)
         self.appController.set('CURRENT_ELEMENT_MODEL', self.model)
         // Show the correct properties form
-
+        let children = document.getElementById('prop-editors').children
+        for (var i = 0; i < children.length; i++) {
+            var element = children[i];
+            // console.log('element: ', element)
+            element.setAttribute('style', 'display: none')
+        }        
+        let propEditor = document.getElementsByTagName(editorName)[0]
+        propEditor.setAttribute('style', 'display: block')
     })      
     this.view.addEventListener('keydown', (event) => {
-        console.log('EVENT:: "element.keydown" triggered!!', event)
+        // console.log('EVENT:: "element.keydown" triggered!!', event)
         if (event.code === 'Backspace'){
             console.log('Element EVENT:: "Backspace keydown" triggered!!', event)
             // Call the element remove method
@@ -94,7 +104,7 @@ var KULElement = function(name, model, appController) {
         onend: function(event) {
             console.log('EVENT:: "element.drag-end" triggered!! ', event)
             // trigger update template event
-            self.appController.dispatchEvent(self.appController.UPDATE_TEMPLATE)
+            self.appController.dispatchEvent(self.appController.UPDATE_MODEL)
         }
     })
     // Add the resizable functionality
@@ -124,7 +134,7 @@ var KULElement = function(name, model, appController) {
         target.setAttribute('data-y', y)
 
     }).on('resizeend', (event) => {
-        self.appController.dispatchEvent(self.appController.UPDATE_TEMPLATE)
+        self.appController.dispatchEvent(self.appController.UPDATE_MODEL)
     })    
 }
 

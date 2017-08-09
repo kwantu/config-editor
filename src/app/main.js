@@ -24,9 +24,9 @@ var SDOViewModel = function (componentType, uuid) {
         },
         "component": {
             "type": componentType,
-            "currentVersion": "2.0.0",
+            "currentVersion": "2_0_0",
             "version": {
-                "2.0.0": {
+                "2_0_0": {
                     "name": {
                         "i18n": {
                             "en": ""
@@ -77,6 +77,10 @@ Polymer({
             type: Object,
             notify: true
         },
+        CURRENT_ELEMENT_TYPE: {
+            type: String,
+            value: ''
+        },
         CURRENT_ELEMENT_ID: {
             type: String,
             value: ''
@@ -85,15 +89,6 @@ Polymer({
             type: Object,
             notify: true
         }
-    },
-    observers: [
-        '_updateModel(SDO_VIEWMODEL.*, this)'
-    ],
-    //
-    _updateModel: (data, _this) => {
-        console.log('EVENT:: "app._updateModel" triggered!!', data)
-        _this.dispatchEvent(_this.READ_MODEL)
-        _this.dispatchEvent(_this.UPDATE_MODEL)
     },
     /**
      * 
@@ -107,7 +102,7 @@ Polymer({
             if (elementName !== '#text') {
                 // Get the data model from the SDO_VIEWMODEL config data model  
                 let model = _.filter(config.elements, { id: elements[i].id })[0]
-                // console.log('model: ', model) 
+                // console.log('config.elements: ', config.elements) 
                 // Create the KUL Element
                 let KElement = new KULElement(elementName, model, _self)
                 let element = KElement.getView()            
@@ -117,7 +112,7 @@ Polymer({
                 }
                 // Set the inner text
                 // @ts-ignore
-                element.childNodes[1].innerText = elements[i].innerText.split('\n').join('').split(' ').join('')
+                // element.childNodes[1].innerText = elements[i].innerText.split('\n').join('').split(' ').join('')
                 // Set the width and height
                 // Set to 'width: 100%; height: 100%' by default to adjust to the size
                 // of the parent element
@@ -184,15 +179,20 @@ Polymer({
         self.addEventListener('updateModel', function (event) {
             // console.log('updateModel event triggered!!') 
             console.log('EVENT:: "SDO updateModel" triggered!!', self.SDO_VIEWMODEL)
+            // Get the current config version
+            let currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+            let path = 'SDO_VIEWMODEL.component.version.' + currentVersion + '.interface.template'
+            self.set(path, canvas.innerHTML)
             database.put(self.SDO_VIEWMODEL, function (err, response) {
                 if (err) {
-                    return console.log(err);
+                    return console.warn(err);
                 }
                 database.get(response.id, function (err, model) {
                     if (err) {
-                        return console.log(err);
+                        return console.warn(err);
                     }
                     self.set('SDO_VIEWMODEL', model)
+                    console.log('After UPDATE:: SDO_VIEWMODEL', model)
                 })
             })
         })
@@ -200,20 +200,11 @@ Polymer({
             console.log('EVENT:: "SDO deleteModel" triggered!!')
 
         })
-        self.addEventListener('updateTemplate', function (event) {
-            console.log('EVENT:: "SDO updateTemplate" triggered!!', self.SDO_VIEWMODEL)
-            // Get the current config version
-            currentVersion = self.SDO_VIEWMODEL.component.currentVersion
-            config = self.SDO_VIEWMODEL.component.version[currentVersion]
-            config.interface.template = canvas.innerHTML            
-            // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
-            self.dispatchEvent(self.UPDATE_MODEL)
-        })
         // Get the config data model
         if (_.isUndefined(self.SDO_VIEWMODEL_ID)) {
             self.set('SDO_VIEWMODEL', SDOViewModel('default', uuid))
             currentVersion = self.SDO_VIEWMODEL.component.currentVersion
-            config = self.SDO_VIEWMODEL.component.version[currentVersion]
+            // config = self.SDO_VIEWMODEL.component.version[currentVersion]
             // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
             self.dispatchEvent(self.CREATE_MODEL)
         } else {
@@ -229,11 +220,11 @@ Polymer({
         // On drop of the element, create the associated Polymer component
         // and associated properties data model
         editor.on('drop', function (element, target, source, sibling) {
-            element.create(config).then(function (data) {
+            element.create(self).then(function (data) {
                 // Add the new element to the SDO_VIEWMODEL elements array
-                config.elements.push(data)
-                // Update the SDO_VIEWMODEL template
-                config.interface.template = canvas.innerHTML
+                let currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+                let elementsPath = 'SDO_VIEWMODEL.component.version.' + currentVersion + '.elements'
+                self.push(elementsPath, data)
                 // Set the current element id
                 self.set('CURRENT_ELEMENT_ID', data.id)
                 // Set the current element model
