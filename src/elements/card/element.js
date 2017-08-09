@@ -16,7 +16,7 @@ Polymer({
             'id': uuid,
             'title': {
                 "i18n": {
-                    "en": "Card Title",
+                    "en": "Card",
                     "pt": ""
                 }
             },
@@ -24,59 +24,26 @@ Polymer({
             'ui': 'card-props',
             'class': 'element',
             'attrs': {
-                'active': true
-            },
-            'elements': []
+                'active': true,
+                'disabled': false
+            }
         }
     },
 
     /**
      * 
      */
-    _createView: function (model, config, self, source, target) {
-        let APP = document.getElementsByTagName('kul-app')[0]
-        // Create the element
-        let elem = document.createElement('kul-card')
-        // Set the initial data model
-        elem.set('model', model)
-        // Set the element id
-        elem.set('id', model.id)
-        // Add the draggable class and initiate the draggable functionality      
-        new Draggabilly(elem, {
-            containment: target
-        }).on('dragStart', (event, pointer) => {
-            // elem.setFocus();
-
-        }).on('dragEnd', (event, pointer) => {
-            console.log('Drag End: ', target.innerHTML)
-            APP.set(
-                'SDO_VIEWMODEL.component.version[SDO_VIEWMODEL.component.currentVersion].interface.template',
-                target.innerHTML)
-
-        })
-        // Change focus on click
-        elem.addEventListener('click', (event) => {
-            // utils.setFocus(elem.children[1], target)
-
-        })
-        // Attach to the DOM
-        Polymer.dom(self.parentNode).replaceChild(elem, self)
-    },
-
-    /**
-     * 
-     */
-    create: function (config, target, source, sibling) {
+    create: function (appController) {
         let self = this
         let guid = uuid.make(1).format()
         return new Promise((resolve, reject) => {
             try {
-                // Create the element config data model
-                let model = self._createModel(guid)
                 // Create the element
-                let view = self._createView(model, config, self, source, target)
+                let KElement = new KULElement('kul-card', self._createModel(guid), appController)
+                // Attach to the DOM
+                Polymer.dom(self.parentNode).replaceChild(KElement.getView(), self)
                 // Return the updated data model                
-                resolve(model)
+                resolve(KElement.getModel())
             } catch (error) {
                 console.error(error)
                 reject(error)

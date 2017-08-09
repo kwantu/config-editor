@@ -2,31 +2,22 @@
 <link rel="import" href="../../../bower_components/paper-card/paper-card.html">
 
 <link rel="import" href="../../modules/utils.html">
+<link rel="import" href="../../modules/element.html">
 
 <dom-module id="kul-card">
     <template>
         <style>
-             :host {
+            :host {
                 display: inline-block
             }
-
-             :host:hover {
-                cursor: pointer;
-            }
-
-             :host.element {
-                padding: 10px;
-            }
-
             .white {
                 background-color: white;
             }
-
-            .focus {
-                border: 2px solid #80cbc4;
+            paper-card {
+                margin: 0;
             }
         </style>
-        <paper-card heading="{{model.title.i18n.en}}">
+        <paper-card id="element" heading="{{model.title.i18n.en}}">
             <div class="card-content">
                 Add content here...
             </div>

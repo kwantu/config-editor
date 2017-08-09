@@ -23,37 +23,34 @@ Polymer({
      * 
      */
     _updateModel: (data) => {
-        console.log('EVENT:: "_updateModel" triggered!!', data)
-        let APP = document.getElementsByTagName('kul-app')[0]
-        // console.log('this.model: ', this.model)
-        let model = _.isUndefined(this.model) ? data.base : this.model
-        // console.log('model: ', model)
-        // Get the related HTML element by ID
-        let element = document.getElementById(model.id)
-        // Update the element data model
-        element.set(data.path, data.value)
-        // Update the SDO_VIEWMODEL
-        
-        // @ts-ignore
-        let viewModel = APP.SDO_VIEWMODEL
-        let elements = viewModel.component.version[viewModel.component.currentVersion].elements
-        // console.log('elements: ', elements)
-        // console.log('model.id: ', model.id)
-        let index = _.findIndex(elements, {
-            id: model.id
-        })
-        // Replace item at index using native splice
-        if (index !== -1) {
-            elements.splice(index, 1, model)
-        } else {
-            elements.push(model)
-        }
-        // elements.splice(index, 1, model)
-        // console.log('index: ', index)
-        // console.log('SDO_VIEWMODEL: ', viewModel)
-        APP.set('SDO_VIEWMODEL', viewModel)
-        // console.log('app.SDO_VIEWMODEL: ', app.SDO_VIEWMODEL)
-        APP.dispatchEvent(APP.UPDATE_MODEL)
+        let appController = document.getElementsByTagName('kul-app')[0]
+        if (appController.CURRENT_ELEMENT_TYPE === 'card-props') {
+            console.log('EVENT:: "card-props._updateModel" triggered!!', data)        
+            let element = document.getElementById(data.base.id)
+            this.model = _.isUndefined(data.base) ? this.model : data.base
+            if (element)
+                // Update the element UI
+                element.set(data.path, data.value)
+            // Update the SDO_VIEWMODEL
+            let viewModel = appController.SDO_VIEWMODEL
+            let currentVersion = viewModel.component.version[viewModel.component.currentVersion]
+            let elements = currentVersion.elements
+            // Find the object index in the App elements array
+            let index = _.findIndex(elements, {
+                id: this.model.id
+            })
+            // console.log('this.model', this.model)
+            // Inset / Update the related item at index using native splice
+            if (index !== -1) {
+                elements.splice(index, 1, this.model)
+            } else {
+                elements.push(this.model)
+            }
+            // Update the SDO_VIEWMODEL
+            appController.set('SDO_VIEWMODEL', viewModel)
+            // Call update template event
+            setTimeout(() => appController.dispatchEvent(appController.UPDATE_MODEL), 1000)
+        }   
     },
     /**
      * 
