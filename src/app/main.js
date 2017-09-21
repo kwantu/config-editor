@@ -88,6 +88,19 @@ Polymer({
         CURRENT_ELEMENT_MODEL: {
             type: Object,
             notify: true
+        },
+        //
+        configId: {
+            type: String,
+            value: function () {
+                return _.get(window.utils.URLParams, 'id')
+            }
+        },
+        modelId: {
+            type: String,
+            value: function () {
+                return _.get(window.utils.URLParams, 'model')
+            }
         }
     },
     /**
@@ -131,25 +144,24 @@ Polymer({
     },
     // On ready life cycle event of the main kwantu-tools element
     ready: function () {
-        let self = this
         // Global Model Events
-        self.CREATE_MODEL = new Event('createModel')
-        self.READ_MODEL = new Event('readModel')
-        self.UPDATE_MODEL = new Event('updateModel')
-        self.DELETE_MODEL = new Event('deleteModel')
-        self.UPDATE_TEMPLATE = new Event('updateTemplate')
+        this.CREATE_MODEL = new Event('createModel')
+        this.READ_MODEL = new Event('readModel')
+        this.UPDATE_MODEL = new Event('updateModel')
+        this.DELETE_MODEL = new Event('deleteModel')
+        this.UPDATE_TEMPLATE = new Event('updateTemplate')
         // Defaults
         // Get the current config version
         let currentVersion = ''
         let config = {}
         // Config editor reference areas
-        let canvas = self.$.canvas
-        let elements = self.$.elements
-        let source = self.$.source
+        let canvas = this.$.canvas
+        let elements = this.$.elements
+        let source = this.$.source
         // Add event listeners for database interaction
-        self.addEventListener('createModel', function (event) {
-            console.log('EVENT:: "SDO createModel" triggered!!', self.SDO_VIEWMODEL)
-            database.put(self.SDO_VIEWMODEL, function (err, response) {
+        this.addEventListener('createModel', function (event) {
+            console.log('EVENT:: "SDO createModel" triggered!!', this.SDO_VIEWMODEL)
+            database.put(this.SDO_VIEWMODEL, function (err, response) {
                 if (err) {
                     return console.warn(err);
                 }
@@ -157,33 +169,33 @@ Polymer({
                     if (err) {
                         return console.warn(err);
                     }
-                    self.set('SDO_VIEWMODEL', model)
-                })
-            })
-        })
-        self.addEventListener('readModel', function (event) {            
-            database.get(self.SDO_VIEWMODEL_ID, function (err, response) {
+                    this.set('SDO_VIEWMODEL', model)
+                }.bind(this))
+            }.bind(this))
+        }.bind(this))
+        this.addEventListener('readModel', function (event) {            
+            database.get(this.SDO_VIEWMODEL_ID, function (err, response) {
                 if (err) {
                     return console.log(err);
                 }
                 // Set the SDO_VIEWMODEL
-                self.set('SDO_VIEWMODEL', response) 
-                console.log('EVENT:: "SDO readModel" triggered!!', self.SDO_VIEWMODEL)               
+                this.set('SDO_VIEWMODEL', response) 
+                console.log('EVENT:: "SDO readModel" triggered!!', this.SDO_VIEWMODEL)               
                 // Get the current config version
-                currentVersion = self.SDO_VIEWMODEL.component.currentVersion
-                config = self.SDO_VIEWMODEL.component.version[currentVersion]
+                currentVersion = this.SDO_VIEWMODEL.component.currentVersion
+                config = this.SDO_VIEWMODEL.component.version[currentVersion]
                 // Initialise the canvas with the saved HTML
-                self._initCanvas(config, canvas, self)  
-            })
-        })
-        self.addEventListener('updateModel', function (event) {
+                this._initCanvas(config, canvas, this)  
+            }.bind(this))
+        }.bind(this))
+        this.addEventListener('updateModel', function (event) {
             // console.log('updateModel event triggered!!') 
-            console.log('EVENT:: "SDO updateModel" triggered!!', self.SDO_VIEWMODEL)
+            console.log('EVENT:: "SDO updateModel" triggered!!', this.SDO_VIEWMODEL)
             // Get the current config version
-            let currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+            let currentVersion = this.SDO_VIEWMODEL.component.currentVersion
             let path = 'SDO_VIEWMODEL.component.version.' + currentVersion + '.interface.template'
-            self.set(path, canvas.innerHTML)
-            database.put(self.SDO_VIEWMODEL, function (err, response) {
+            this.set(path, canvas.innerHTML)
+            database.put(this.SDO_VIEWMODEL, function (err, response) {
                 if (err) {
                     return console.warn(err);
                 }
@@ -191,25 +203,25 @@ Polymer({
                     if (err) {
                         return console.warn(err);
                     }
-                    self.set('SDO_VIEWMODEL', model)
+                    this.set('SDO_VIEWMODEL', model)
                     console.log('After UPDATE:: SDO_VIEWMODEL', model)
-                })
-            })
-        })
-        self.addEventListener('deleteModel', function (event) {
+                }.bind(this))
+            }.bind(this))
+        }.bind(this))
+        this.addEventListener('deleteModel', function (event) {
             console.log('EVENT:: "SDO deleteModel" triggered!!')
 
-        })
+        }.bind(this))
         // Get the config data model
-        if (_.isUndefined(self.SDO_VIEWMODEL_ID)) {
-            self.set('SDO_VIEWMODEL', SDOViewModel('default', uuid))
-            currentVersion = self.SDO_VIEWMODEL.component.currentVersion
-            // config = self.SDO_VIEWMODEL.component.version[currentVersion]
-            // console.log('SDO_VIEWMODEL: ', self.SDO_VIEWMODEL)
-            self.dispatchEvent(self.CREATE_MODEL)
+        if (_.isUndefined(this.SDO_VIEWMODEL_ID)) {
+            this.set('SDO_VIEWMODEL', SDOViewModel('default', uuid))
+            currentVersion = this.SDO_VIEWMODEL.component.currentVersion
+            // config = this.SDO_VIEWMODEL.component.version[currentVersion]
+            // console.log('SDO_VIEWMODEL: ', this.SDO_VIEWMODEL)
+            this.dispatchEvent(this.CREATE_MODEL)
         } else {
-            // console.log('self.SDO_VIEWMODEL_ID: ' + self.SDO_VIEWMODEL_ID)
-            self.dispatchEvent(self.READ_MODEL)
+            // console.log('this.SDO_VIEWMODEL_ID: ' + this.SDO_VIEWMODEL_ID)
+            this.dispatchEvent(this.READ_MODEL)
         }        
 
         // Initialise the drag and drop functionality
@@ -220,21 +232,21 @@ Polymer({
         // On drop of the element, create the associated Polymer component
         // and associated properties data model
         editor.on('drop', function (element, target, source, sibling) {
-            element.create(self).then(function (data) {
+            element.create(this).then((data) => {
                 // Add the new element to the SDO_VIEWMODEL elements array
-                let currentVersion = self.SDO_VIEWMODEL.component.currentVersion
+                let currentVersion = this.SDO_VIEWMODEL.component.currentVersion
                 let elementsPath = 'SDO_VIEWMODEL.component.version.' + currentVersion + '.elements'
-                self.push(elementsPath, data)
+                this.push(elementsPath, data)
                 // Set the current element id
-                self.set('CURRENT_ELEMENT_ID', data.id)
+                this.set('CURRENT_ELEMENT_ID', data.id)
                 // Set the current element model
-                self.set('CURRENT_ELEMENT_MODEL', data)
+                this.set('CURRENT_ELEMENT_MODEL', data)
                 // Persist the SDO_VIEWMODEL
-                self.dispatchEvent(self.UPDATE_MODEL)
+                this.dispatchEvent(this.UPDATE_MODEL)
             }).catch(function (error) {
                 console.error(error)
-            })
-        })
+            }.bind(this))
+        }.bind(this))
 
         // Reload code editor on click of the source tab
         canvas.addEventListener('click', function (event) {
@@ -247,7 +259,7 @@ Polymer({
                 // @ts-ignore
                 element.set('visible', false)
             }
-        })
+        }.bind(this))
     }
 
 });

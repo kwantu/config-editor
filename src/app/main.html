@@ -10,6 +10,7 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/beautify-json/beautify-json.html">
 <link rel="import" href="../elements/all.html">
+<link rel="import" href="widget.html">
 <style is="custom-style" include="iron-flex iron-positioning"></style>
 <link rel="import" href="style.html">
 
@@ -56,7 +57,9 @@
                     <iron-pages selected="{{designSelector}}" style="height: 93.2%;">
                         <div id="canvas" class="grid resize-container"></div>
                         <!-- <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json> -->
-                        <div></div> 
+                        <div>
+                            <kul-widget config-id="{{configId}}" model-id="{{modelId}}"></kul-widget>    
+                        </div> 
                     </iron-pages>
                 </div>
                 <div class="flex panel">

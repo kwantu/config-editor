@@ -9,6 +9,7 @@
         <style>
             :host {
                 display: block;
+                /* background-image: url(); */
             }
             :host:hover {
                 cursor: pointer;
@@ -16,8 +17,20 @@
             div.element {
                 padding: 5px;
             } 
+            img {
+                vertical-align: middle;
+            }
+            span {
+                padding-left: 5px;
+                position: relative;
+                top: 2px;
+            }
         </style>
-        <div class="element">Button</div>
+        <div class="element">
+            <img src="../../images/kul-button.png" width="40" height="20">
+                <span>Button</span>
+            </img>
+        </div>
     </template>
     <script type="text/javascript" src="element.js"></script>
 </dom-module>
