@@ -1,0 +1,73 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/classes/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/paper-toolbar/paper-toolbar.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../../bower_components/iron-pages/iron-pages.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tab.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
+<link rel="import" href="../../bower_components/beautify-json/beautify-json.html">
+<link rel="import" href="../../bower_components/elements/index.html">
+<style is="custom-style" include="iron-flex iron-positioning"></style>
+<link rel="import" href="style.html">
+
+<dom-module id="kul-app">
+    <template>
+        <style include="style"></style>
+        <!-- Build the template for the config editor IDE -->
+        <div class="vertical layout container">
+            <paper-toolbar>
+                <img class="logo" src="../images/kwantuLogo.svg"></img>
+                <div class="title">{{SDO_VIEWMODEL.name.i18n.en}}</div>
+                <paper-icon-button icon="save"></paper-icon-button>
+                <paper-icon-button icon="undo"></paper-icon-button>
+                <paper-icon-button icon="redo"></paper-icon-button>
+                <paper-icon-button icon="more-vert"></paper-icon-button>
+                <div id="progressBar" class="bottom fit"></div>
+            </paper-toolbar>
+            <div class="horizontal layout main">
+                <div class="flex panel">
+                    <paper-tabs selected="{{elemSelector}}">
+                        <paper-tab>Elements</paper-tab>
+                        <!-- <paper-tab>Outline</paper-tab> -->
+                    </paper-tabs>
+                    <iron-pages style="height: inherit" selected="{{elemSelector}}">
+                        <div id="elements">
+                            <elem-button></elem-button>
+                            <elem-card></elem-card>
+                        </div>
+                        <!-- <div></div> -->
+                    </iron-pages>
+                </div>
+                <div class="flex-3 panel">
+                    <paper-tabs selected="{{designSelector}}">
+                        <paper-tab>Designer</paper-tab>
+                        <!-- <paper-tab id="tabSource">Source</paper-tab> -->
+                        <paper-tab>Widget</paper-tab>
+                    </paper-tabs>
+                    <iron-pages selected="{{designSelector}}" style="height: 93.2%;">
+                        <div id="canvas" class="grid resize-container"></div>
+                        <!-- <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json> -->
+                        <div></div> 
+                    </iron-pages>
+                </div>
+                <div class="flex panel">
+                    <paper-tabs selected="{{propSelector}}">
+                        <paper-tab>Properties</paper-tab>
+                        <!--<paper-tab>Layout</paper-tab>-->
+                    </paper-tabs>
+                    <iron-pages selected="{{propSelector}}">
+                        <div id="prop-editors">
+                            <button-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></button-props>
+                            <card-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></card-props>
+                        </div>
+                        <!--<div></div>-->
+                    </iron-pages>
+                </div>
+            </div>
+        </div>
+    </template>
+    <script type="text/javascript" src="main.js"></script>
+</dom-module>

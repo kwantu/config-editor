@@ -1,0 +1,33 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/app/main.html",
+  "fragments": [
+    "src/elements/**/*",
+    "src/modules/**/*"
+  ],
+  "sources": [
+    "src/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json", 
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ],
+  "builds": [{
+    "bundle": true,
+    "js": {
+      "compile": true,
+      "minify": true
+    },
+    "css": {
+      "minify": true
+    },
+    "html": {
+      "minify": true
+    }
+  }],
+  "lint": {
+    "rules": ["polymer-2"],
+    "ignoreWarnings": []
+  }
+}
