@@ -37,6 +37,10 @@
                         <div id="elements">
                             <elem-button></elem-button>
                             <elem-card></elem-card>
+                            <elem-form></elem-form>
+                            <div>Select</div>
+                            <div>Field</div>
+                            <div>Repeat</div>
                         </div>
                         <!-- <div></div> -->
                     </iron-pages>
@@ -59,9 +63,10 @@
                         <!--<paper-tab>Layout</paper-tab>-->
                     </paper-tabs>
                     <iron-pages selected="{{propSelector}}">
-                        <div id="prop-editors">
+                        <div id="prop-editors" style="height: 500px; overflow: true">
                             <button-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></button-props>
                             <card-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></card-props>
+                            <form-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></form-props>
                         </div>
                         <!--<div></div>-->
                     </iron-pages>

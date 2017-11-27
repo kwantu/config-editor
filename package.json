@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "polymer build",
-    "start": "polymer serve | npm run watch",
-    "watch": "browser-sync start --proxy localhost:8081 --files \"src/**/*.*, index.html, *.js\"",
+    "start": "polymer serve --port 8080 | npm run watch",
+    "watch": "browser-sync start --proxy localhost:8080 --files \"src/**/*.*, index.html, *.js\"",
     "serve": "polymer serve",
     "server:build": "polymer serve build/default"
   },
