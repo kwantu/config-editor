@@ -10,6 +10,7 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/beautify-json/beautify-json.html">
 <link rel="import" href="../../bower_components/elements/index.html">
+<link rel="import" href="../../bower_components/kul-widget/kul-widget.html">
 <style is="custom-style" include="iron-flex iron-positioning"></style>
 <link rel="import" href="style.html">
 
@@ -54,7 +55,21 @@
                     <iron-pages selected="{{designSelector}}" style="height: 93.2%;">
                         <div id="canvas" class="grid resize-container"></div>
                         <!-- <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json> -->
-                        <div></div> 
+                        <div>
+                            <kul-widget config-id="{{SDO_VIEWMODEL_ID}}"></kul-widget> 
+                            <div style="margin: 10px; padding: 20px; border: 1px solid #efefef; position: fixed; bottom: 5px;">
+                                <p>
+                                    Install using the private bower instance:
+                                    #$ bower i kul-widget --save
+                                </p>
+                                <p>
+                                    Include in the head of the web page:
+                                    <pre>&lt;link rel="import" href="../../bower_components/kul-widget/kul-widget.html"&gt;</pre>
+                                </p>
+                                Include the widget markup in the page:
+                                <pre>&lt;kul-widget config-id="{{SDO_VIEWMODEL_ID}}"&gt;&lt;/kul-widget&gt;</pre>
+                            </div>
+                        </div> 
                     </iron-pages>
                 </div>
                 <div class="flex panel">

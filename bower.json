@@ -21,7 +21,8 @@
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.0.0",
     "interactjs": "^1.2.9",
     "elements": "*",
-    "utils": "*"
+    "utils": "*",
+    "kul-widget": "*"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
