@@ -1,7 +1,7 @@
 # Config Editor
 > Kwantu Configuration Editor
 
-(config-editor/Home_Screenshot.png)
+![Alt text](Home_Screenshot.png?raw=true "Optional Title")
 
 ## Install the Polymer-CLI
 
