@@ -1,7 +1,7 @@
 # Config Editor
 > POC: Polymer Base - Kwantu Configuration Editor
 
-![Alt text](Home_Screenshot.png?raw=true "Optional Title")
+![Alt text](Home_Screenshot.png?raw=true "Configuration Editor Screenshot")
 
 ## Install the Polymer-CLI
 
@@ -37,4 +37,4 @@ $ npm start:build
 ```
 $ npm start
 ```
-> PLEASE NOTE:: This projet uses the private bower to install private dependancies sored at - http://kwantu10.kwantu.net:5678/
+> PLEASE NOTE:: This projet uses the private bower to install private dependancies stored at - http://kwantu10.kwantu.net:5678/
