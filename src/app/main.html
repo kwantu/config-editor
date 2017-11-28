@@ -10,6 +10,7 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/beautify-json/beautify-json.html">
 <link rel="import" href="../../bower_components/elements/index.html">
+<link rel="import" href="../../bower_components/kul-widget/kul-widget.html">
 <style is="custom-style" include="iron-flex iron-positioning"></style>
 <link rel="import" href="style.html">
 
@@ -37,6 +38,10 @@
                         <div id="elements">
                             <elem-button></elem-button>
                             <elem-card></elem-card>
+                            <elem-form></elem-form>
+                            <div>Select</div>
+                            <div>Field</div>
+                            <div>Repeat</div>
                         </div>
                         <!-- <div></div> -->
                     </iron-pages>
@@ -50,7 +55,21 @@
                     <iron-pages selected="{{designSelector}}" style="height: 93.2%;">
                         <div id="canvas" class="grid resize-container"></div>
                         <!-- <beautify-json output="{{SDO_VIEWMODEL}}" highlight="true"></beautify-json> -->
-                        <div></div> 
+                        <div>
+                            <kul-widget config-id="{{SDO_VIEWMODEL_ID}}"></kul-widget> 
+                            <div style="margin: 10px; padding: 20px; border: 1px solid #efefef; position: fixed; bottom: 5px;">
+                                <p>
+                                    Install using the private bower instance:
+                                    #$ bower i kul-widget --save
+                                </p>
+                                <p>
+                                    Include in the head of the web page:
+                                    <pre>&lt;link rel="import" href="../../bower_components/kul-widget/kul-widget.html"&gt;</pre>
+                                </p>
+                                Include the widget markup in the page:
+                                <pre>&lt;kul-widget config-id="{{SDO_VIEWMODEL_ID}}"&gt;&lt;/kul-widget&gt;</pre>
+                            </div>
+                        </div> 
                     </iron-pages>
                 </div>
                 <div class="flex panel">
@@ -59,9 +78,10 @@
                         <!--<paper-tab>Layout</paper-tab>-->
                     </paper-tabs>
                     <iron-pages selected="{{propSelector}}">
-                        <div id="prop-editors">
+                        <div id="prop-editors" style="height: 500px; overflow: true">
                             <button-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></button-props>
                             <card-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></card-props>
+                            <form-props style="display: none" model="{{CURRENT_ELEMENT_MODEL}}"></form-props>
                         </div>
                         <!--<div></div>-->
                     </iron-pages>
