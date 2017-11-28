@@ -1,6 +1,7 @@
-# \<config-editor\>
+# Config Editor
+> Kwantu Configuration Editor
 
-Kwantu Configuration Editor
+(config-editor/Home_Screenshot.png)
 
 ## Install the Polymer-CLI
 
