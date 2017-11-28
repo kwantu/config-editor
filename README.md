@@ -1,5 +1,5 @@
 # Config Editor
-> Kwantu Configuration Editor
+> POC: Polymer Base - Kwantu Configuration Editor
 
 ![Alt text](Home_Screenshot.png?raw=true "Optional Title")
 
@@ -7,33 +7,34 @@
 
 First, make sure you have the [Polymer CLI](https://www.npmjs.com/package/polymer-cli) installed. Then run `polymer serve` to serve your application locally.
 
-## Viewing Your Application
+## Installation Process
+
+You would first need to clone the repo then run:
 
 ```
-$ polymer serve
+$ npm i && bower i
 ```
 
-## Building Your Application
+## Build Process
 
 ```
-$ polymer build
+$ npm run build
 ```
 
 This will create a `build/` folder with `bundled/` and `unbundled/` sub-folders
 containing a bundled (Vulcanized) and unbundled builds, both run through HTML,
 CSS, and JS optimizers.
 
-You can serve the built versions by giving `polymer serve` a folder to serve
+You can serve the built versions by giving `npm start` a folder to serve
 from:
 
 ```
-$ polymer serve build/bundled
+$ npm start:build
 ```
 
-## Running Tests
+## Running / Serving Locally (For Development)
 
 ```
-$ polymer test
+$ npm start
 ```
-
-Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+> PLEASE NOTE:: This projet uses the private bower to install private dependancies sored at - http://kwantu10.kwantu.net:5678/
